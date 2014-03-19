@@ -27,14 +27,10 @@ namespace IdentitySample
         {
             var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
             var RoleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+
             var myinfo = new MyUserInfo() { FirstName = "Pranav", LastName = "Rastogi" };
             string name = "Admin";
             string password = "123456";
-            string test = "test";
-
-            //Create Role Test and User Test
-            RoleManager.Create(new IdentityRole(test));
-            UserManager.Create(new ApplicationUser() { UserName = test });
 
             //Create Role Admin if it does not exist
             if (!RoleManager.RoleExists(name))
@@ -42,18 +38,47 @@ namespace IdentitySample
                 var roleresult = RoleManager.Create(new IdentityRole(name));
             }
 
-            //Create User=Admin with password=123456
-            var user = new ApplicationUser();
-            user.UserName = name;
-            user.HomeTown = "Seattle";
-            user.MyUserInfo = myinfo;
-            var adminresult = UserManager.Create(user, password);
-
-            //Add User Admin to Role Admin
+            //Create admin=Admin with password=123456
+            var admin = new ApplicationUser();
+            admin.UserName = name;
+            admin.HomeTown = "Seattle";
+            admin.MyUserInfo = myinfo;
+            var adminresult = UserManager.Create(admin, password);
+            
+            //Add admin Admin to Role Admin
             if (adminresult.Succeeded)
             {
-                var result = UserManager.AddToRole(user.Id, name);
+                var result = UserManager.AddToRole(admin.Id, name);
             }
+
+            // -- Added and modified by MF
+            string test = "mark";
+            string int422 = "INT422";
+
+            //Create Role INT422 if it does not exist and add User mark to it
+            if (!RoleManager.RoleExists(int422))
+            {
+                var roleresult = RoleManager.Create(new IdentityRole(int422));
+            }
+            //RoleManager.Create(new IdentityRole(int422));
+            //UserManager.Create(new ApplicationUser() { UserName = test });
+
+            //Create User=mark with password=123456 
+            var user = new ApplicationUser();
+            var userinfo = new MyUserInfo() { FirstName = "Mark", LastName = "Fernandes" };
+            user.UserName = test;
+            user.HomeTown = "Toronto";
+            user.MyUserInfo = userinfo;
+            var userresult = UserManager.Create(user, password);
+
+            //Add User test to Role INT422
+            if (userresult.Succeeded)
+            {
+                var result = UserManager.AddToRole(user.Id, int422);
+            }
+
+            //
+
         }
     }
 }
