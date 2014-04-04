@@ -82,8 +82,18 @@ namespace IdentitySample.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Home");
+                    var um = new UserManager<ApplicationUser>(
+                           new UserStore<ApplicationUser>(new MyDbContext()));
+                    var idResult = um.AddToRole(user.Id, "INT422");
+                    if (idResult.Succeeded)
+                    {
+                        await SignInAsync(user, isPersistent: false);
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else
+                    {
+                        AddErrors(result);
+                    }
                 }
                 else
                 {

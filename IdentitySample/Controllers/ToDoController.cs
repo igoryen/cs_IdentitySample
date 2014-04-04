@@ -33,8 +33,8 @@ namespace IdentitySample.Controllers
         }
 
         // GET: /ToDo/All
-        //[Authorize(Roles="Admin")]
-        [Authorize(Roles="Admin,INT422")]
+        [Authorize(Roles="Admin")]
+        //[Authorize(Roles="Admin,INT422")]
         public async Task<ActionResult> All()
         {
             return View(await db.ToDoes.ToListAsync());
